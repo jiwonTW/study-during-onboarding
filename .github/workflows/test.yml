@@ -19,6 +19,7 @@ jobs:
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: 일반
           SLACK_USERNAME: Take a look
           SLACK_ICON: https://user-images.githubusercontent.com/103918900/187191022-1baacdd8-6208-46df-b9a4-2c2081de4809.png
           SLACK_COLOR: "#ffcd00"
