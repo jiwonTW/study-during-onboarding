@@ -1,0 +1,31 @@
+name: New discussion notification
+
+on:
+  discussion:
+    branches:
+      - develop
+      - test
+    types:
+      - created
+
+jobs:
+  slackNotification:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Title
+        id: get-title
+        run: echo "::set-output name=content::[Discussions/${{github.event.discussion.category.name}}]${{github.event.discussion.title}}"
+      - name: Get Description
+        id: get-description
+        run: echo "::set-output name=content::${{github.event.discussion.body}}"
+      - name: Notify new discussion
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: 일반
+          SLACK_USERNAME: Take a look
+          SLACK_ICON: https://user-images.githubusercontent.com/103918900/187191022-1baacdd8-6208-46df-b9a4-2c2081de4809.png
+          SLACK_COLOR: '#ffcd00'
+          SLACK_TITLE: '${{ steps.get-title.outputs.content }}'
+          SLACK_MESSAGE: '${{ steps.get-description.outputs.content }}~~!!!!!!!!!!^ㅁ^'
+          MSG_MINIMAL: true
