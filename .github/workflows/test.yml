@@ -4,25 +4,37 @@ on:
   discussion:
     types:
       - created
+      - answered
 
 jobs:
   slackNotification:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Get Title
+      - name: Get Title of discussion
         id: get-title
-        run: echo "::set-output name=content::[Discussions/${{github.event.discussion.category.name}}]${{github.event.discussion.title}}"
-      - name: Get Description
-        id: get-description
-        run: echo "::set-output name=content::${{github.event.discussion.body}}"
+        run: echo "::set-output name=title::${{ github.event.action != 'created' && '새로운 디스커션을 확인해주세요!' | '답변이 정해진 디스커션이 있어요!'}}"
+
+      - name: Get current date
+        id: get-date
+        run: |
+          sudo timedatectl set-timezone Asia/Seoul
+          echo ::set-output name=date::$(date +"%Y-%m-%dT%H:%M")
+
+      - name: Convert body of discussion to slack markdown
+        uses: LoveToKnow/slackify-markdown-action@v1.0.0
+        id: discussion-to-markdown
+        with:
+          text: "**[[${{github.event.discussion.category.name}}]${{github.event.discussion.title}}](${{github.event.discussion.html_url}})** \n ${{github.event.discussion.body}}"
+
       - name: Notify new discussion
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_CHANNEL: 일반
+          SLACK_CHANNEL: for-test
+          SLACK_TITLE: ${{steps.get-title.outputs.title}}
           SLACK_USERNAME: Take a look
           SLACK_ICON: https://user-images.githubusercontent.com/103918900/187191022-1baacdd8-6208-46df-b9a4-2c2081de4809.png
-          SLACK_COLOR: "#ffcd00"
-          SLACK_TITLE: "${{ steps.get-title.outputs.content }}"
-          SLACK_MESSAGE: "${{ steps.get-description.outputs.content }}"
+          SLACK_MESSAGE: ${{steps.discussion-to-markdown.outputs.text}}
+          SLACK_FOOTER: 'This discussion is created at ${{steps.get-date.outputs.date}}'
           MSG_MINIMAL: true
