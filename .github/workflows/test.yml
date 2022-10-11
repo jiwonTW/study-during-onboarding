@@ -27,7 +27,7 @@ jobs:
         id: get-date
         run: |
           echo ::set-output name=date::$(${{ github.event }} +"%Y-%m-%d %H:%M")
-          echo (${{ toJson(github.event) }})
+          echo ${{ toJson(github.event) }}
 
       - name: Convert body of discussion to slack markdown
         uses: LoveToKnow/slackify-markdown-action@v1.0.0
