@@ -27,7 +27,7 @@ jobs:
         id: get-date
         run: |
           sudo timedatectl set-timezone Asia/Seoul
-          echo ::set-output name=date::$(date +"%Y-%m-%d %H:%M")
+          echo ::set-output name=date::$(${{ github.event.discussion.created_at }} +"%Y-%m-%d %H:%M")
 
       - name: Convert body of discussion to slack markdown
         uses: LoveToKnow/slackify-markdown-action@v1.0.0
