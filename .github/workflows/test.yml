@@ -23,12 +23,6 @@ jobs:
           head -n 5 temp.txt >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
 
-      - name: Get current date
-        id: get-date
-        run: |
-          echo ::set-output name=date::$(${{ github.event.discussion.created_at }} +"%Y-%m-%d %H:%M")
-          echo ${{ github.event.discussion.created_at }}
-
       - name: Convert body of discussion to slack markdown
         uses: LoveToKnow/slackify-markdown-action@v1.0.0
         id: discussion-to-markdown
@@ -40,10 +34,10 @@ jobs:
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_CHANNEL: for-test
-          SLACK_TITLE: ${{steps.get-title.outputs.title}}
-          SLACK_MESSAGE: ${{steps.discussion-to-markdown.outputs.text}}
           SLACK_USERNAME: Take a look
           SLACK_COLOR: '#ffcd00'
           SLACK_ICON: https://user-images.githubusercontent.com/103918900/187191022-1baacdd8-6208-46df-b9a4-2c2081de4809.png
-          SLACK_FOOTER: 'This discussion is created at ${{steps.get-date.outputs.date}}'
+          SLACK_TITLE: ${{steps.get-title.outputs.title}}
+          SLACK_MESSAGE: ${{steps.discussion-to-markdown.outputs.text}}
+          SLACK_FOOTER: ''
           MSG_MINIMAL: true
