@@ -41,7 +41,7 @@ jobs:
             -H "Notion-Version: 2022-06-28" \
             -X PATCH \
           --data '{
-            "parent": { "page_id": ${{steps.job_row.outputs.result.id}} },
+            "parent": { "page_id": ${{steps.job_row.outputs}} },
             "properties": {
               "status": { "select": "abc" }
             }
