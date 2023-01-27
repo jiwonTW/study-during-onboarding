@@ -15,7 +15,7 @@ jobs:
 
       - name: Get branch name
         run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-        id: branch_name
+        id: get_branch
 
       - name: Get Database row
         id: job_row
@@ -41,7 +41,7 @@ jobs:
             -H "Notion-Version: 2022-06-28" \
             -X PATCH \
           --data '{
-            "parent": { "page_id": ${{steps.job_row.outputs}} },
+            "parent": { "page_id": ${{steps.job_row.outcome}} },
             "properties": {
               "status": { "select": "abc" }
             }
