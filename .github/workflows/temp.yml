@@ -45,7 +45,7 @@ jobs:
             -H "Notion-Version: 2022-06-28" \
             -X PATCH \
           --data '{
-            "parent": { "database_id": ${{steps.database_id.outputs.id}} },
+            "parent": { "database_id": ${{steps.database_id.outputs.id[0].id}} },
             "properties": {
               "status": { "select": "abc" }
             }
