@@ -45,6 +45,6 @@ jobs:
             -X PATCH \
           --data '{
             "properties": {
-              "status": { "select": "abc" }
+              "status": { "select": {"name":"abc"} }
             }
           }'
