@@ -34,7 +34,7 @@ jobs:
 
       - name: Set database id
         id: database_id
-        run: echo "::set-output name=id::$(cat row.json | jq -c '.workspaces[] | select(.name == "My Workspace").id')"
+        run: echo "::set-output name=id::$(cat row.json)"
 
       - name: Update database row
         run: |
